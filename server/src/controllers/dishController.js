@@ -2,6 +2,10 @@ import { asyncHandler } from '../middleware/asyncHandler.js';
 import { sendSuccess } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import { Dish } from '../models/Dish.js';
+// Side-effect import: registers the Restaurant model with Mongoose so that
+// `.populate('restaurant')` below works at runtime (the schema defines the ref,
+// but the model must be loaded for population to resolve it).
+import '../models/Restaurant.js';
 
 // Maps the API `sort` keyword to a Mongoose sort object.
 const SORT_MAP = {
