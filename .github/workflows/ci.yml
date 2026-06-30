@@ -1,0 +1,68 @@
+name: CI
+
+# Run on pushes to main and on every pull request targeting main.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  server:
+    name: Server (install + smoke import)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      # Use `npm ci` when a lockfile exists for reproducible installs,
+      # otherwise fall back to `npm install` (lockfile is gitignored-free here).
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      # Verifies the whole app graph imports and assembles without a DB.
+      # Catches syntax errors, bad imports and wiring issues in CI.
+      - name: Smoke import (assemble Express app)
+        env:
+          JWT_SECRET: ci_dummy_secret
+          MONGO_URI: mongodb://localhost:27017/ci
+        run: node --input-type=module -e "import('./src/app.js').then(m => { m.createApp(); console.log('server app assembled OK'); }).catch(e => { console.error(e); process.exit(1); });"
+
+  client:
+    name: Client (lint + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

@@ -170,6 +170,26 @@ See [`server/README.md`](./server/README.md) for the full **API reference**.
 
 ---
 
+## 🚀 Deployment & CI
+
+### Continuous Integration
+Every push to `main` and every pull request runs [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
+- **Server** — installs deps and assembles the Express app (catches syntax/import/wiring errors, no DB needed).
+- **Client** — runs ESLint (`--max-warnings 0`) and a production Vite build.
+
+### One-click deploy (Render)
+The repo includes a [`render.yaml`](./render.yaml) Blueprint that provisions both services:
+
+1. In Render, choose **New → Blueprint** and point it at this repo.
+2. Set the secrets it asks for:
+   - `flavorhub-api` → **`MONGO_URI`** (your Atlas string). `JWT_SECRET` is auto-generated.
+   - After the first deploy, set **`CLIENT_URL`** on the API to the web URL (e.g. `https://flavorhub-web.onrender.com`) and **`VITE_API_BASE_URL`** on the web service to the API URL **with `/api`** (e.g. `https://flavorhub-api.onrender.com/api`), then redeploy.
+
+### Frontend on Vercel (alternative)
+[`client/vercel.json`](./client/vercel.json) configures the Vite build + SPA routing. Import the repo in Vercel, set the **Root Directory** to `client`, add `VITE_API_BASE_URL` (your API URL + `/api`), and deploy.
+
+---
+
 ## 📜 License
 
 MIT — built for demonstration purposes.

@@ -1,0 +1,59 @@
+# Render Blueprint — one-click infra for Flavor Hub.
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Deploys two services:
+#   1. flavorhub-api    — the Express REST API (Node web service)
+#   2. flavorhub-web    — the React/Vite client (static site)
+#
+# After importing this blueprint in Render, set the secret env vars marked
+# `sync: false` (MONGO_URI) in the dashboard. JWT_SECRET is auto-generated.
+
+services:
+  # ---------------------------- Backend API ----------------------------
+  - type: web
+    name: flavorhub-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Set this in the Render dashboard (MongoDB Atlas connection string).
+      - key: MONGO_URI
+        sync: false
+      # Auto-generated strong secret for signing JWTs.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # Allowed CORS origin(s). After the first deploy, set this to the web
+      # service URL, e.g. https://flavorhub-web.onrender.com (no trailing slash).
+      - key: CLIENT_URL
+        sync: false
+      - key: PAYMENT_PROVIDER
+        value: mock
+
+  # ---------------------------- Frontend (static) ----------------------------
+  - type: web
+    name: flavorhub-web
+    runtime: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    autoDeploy: true
+    # SPA fallback so client-side routes resolve to index.html.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Build-time API base URL. After the API deploys, set this to its full URL
+      # WITH the /api suffix, e.g. https://flavorhub-api.onrender.com/api
+      - key: VITE_API_BASE_URL
+        sync: false
