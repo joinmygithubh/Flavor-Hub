@@ -1,0 +1,53 @@
+# Flavor Hub — local one-command spin-up.
+#
+#   docker compose up --build
+#   # then seed the catalogue (first run only):
+#   docker compose exec api npm run seed
+#
+# Web UI:  http://localhost:8080
+# API:     http://localhost:5000/api/health
+#
+# The web container (nginx) reverse-proxies /api to the API container, so the
+# browser talks to a single origin and no CORS config is needed locally.
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/flavorhub
+      # Local-only dev secret. Use a real secret manager in production.
+      JWT_SECRET: local_dev_secret_change_me
+      JWT_EXPIRES_IN: 7d
+      CLIENT_URL: http://localhost:8080
+      PAYMENT_PROVIDER: mock
+    ports:
+      - "5000:5000"
+
+  web:
+    build: ./client
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:

@@ -140,6 +140,21 @@ npm run dev:client
 
 Open **http://localhost:5173** 🎉  (Vite proxies `/api` → `localhost:5000`, so no CORS setup needed in dev.)
 
+### Run with Docker (one command)
+
+Prefer containers? The repo ships a full Docker setup (MongoDB + API + nginx-served client):
+
+```bash
+docker compose up --build
+# first run only — seed the catalogue:
+docker compose exec api npm run seed
+```
+
+- Web UI → **http://localhost:8080**  (nginx reverse-proxies `/api` to the API, single origin, no CORS config needed)
+- API health → **http://localhost:5000/api/health**
+
+No local Node or MongoDB install required — just Docker.
+
 ---
 
 ## 💳 Payment flows
