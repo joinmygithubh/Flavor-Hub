@@ -1,6 +1,12 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Resolve the .env path relative to THIS file (server/src/config/env.js), so the
+// server loads server/.env no matter which directory you launch it from
+// (e.g. `node src/server.js`, `node src/config/..`, or via npm scripts).
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 /**
  * Centralized, validated access to environment variables.
