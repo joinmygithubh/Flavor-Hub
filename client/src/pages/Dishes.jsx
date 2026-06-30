@@ -66,7 +66,7 @@ const Dishes = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="container-page py-8">
       {/* Header + search */}
       <div className="mb-6">
         <h1 className="font-display text-3xl font-bold">Explore the menu</h1>
@@ -122,7 +122,7 @@ const Dishes = () => {
             />
           ) : (
             <>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 {dishes.map((dish) => (
                   <DishCard key={dish._id} dish={dish} />
                 ))}

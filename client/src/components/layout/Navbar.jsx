@@ -45,7 +45,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-40 border-b border-black/5 bg-cream/85 backdrop-blur-md dark:border-white/10 dark:bg-charcoal/85">
-      <nav className="mx-auto flex max-w-7xl items-center gap-2 px-3 py-3 sm:gap-5 sm:px-4">
+      <nav className="container-page flex items-center gap-2 py-3 sm:gap-5">
         {/* Logo — wordmark hidden on the smallest screens to save room */}
         <Link to="/" className="flex shrink-0 items-center" aria-label="Flavor Hub home">
           <Logo withWordmark={false} markSize={36} className="sm:hidden" />
