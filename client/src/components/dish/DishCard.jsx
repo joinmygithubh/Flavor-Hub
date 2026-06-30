@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import SafeImage from '../ui/SafeImage.jsx';
 import Rating from '../ui/Rating.jsx';
 import VegBadge from '../ui/VegBadge.jsx';
+import FavoriteButton from '../ui/FavoriteButton.jsx';
 import { useCartStore } from '../../store/cartStore.js';
 import { useUIStore } from '../../store/uiStore.js';
 import { formatCurrency } from '../../utils/format.js';
@@ -37,15 +38,15 @@ const DishCard = ({ dish }) => {
           <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-primary-600 shadow-sm backdrop-blur dark:bg-charcoal/80">
             {dish.cuisine}
           </span>
-          <span className="absolute right-3 top-3 rounded-md bg-white/90 p-1 shadow-sm backdrop-blur dark:bg-charcoal/80">
-            <VegBadge isVeg={dish.isVeg} />
-          </span>
+          {/* Favorite toggle floats top-right. */}
+          <FavoriteButton dishId={dish._id} className="absolute right-3 top-3" />
         </div>
 
         <div className="space-y-2 p-4">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="line-clamp-1 font-display text-base font-semibold text-charcoal dark:text-cream">
-              {dish.name}
+            <h3 className="line-clamp-1 flex items-center gap-2 font-display text-base font-semibold text-charcoal dark:text-cream">
+              <VegBadge isVeg={dish.isVeg} />
+              <span className="line-clamp-1">{dish.name}</span>
             </h3>
             <Rating value={dish.rating} />
           </div>

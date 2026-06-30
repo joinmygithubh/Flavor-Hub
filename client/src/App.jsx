@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout.jsx';
 import OrderConfirmation from './pages/OrderConfirmation.jsx';
 import OrderTracking from './pages/OrderTracking.jsx';
 import Profile from './pages/Profile.jsx';
+import Favorites from './pages/Favorites.jsx';
 import Admin from './pages/Admin.jsx';
 import NotFound from './pages/NotFound.jsx';
 
@@ -64,6 +65,14 @@ const App = () => (
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <ProtectedRoute>
+              <Favorites />
             </ProtectedRoute>
           }
         />

@@ -1,13 +1,15 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { authService } from '../api/authService.js';
 import { tokenStorage } from '../api/axiosInstance.js';
+import { useFavoriteStore } from '../store/favoriteStore.js';
 
 const AuthContext = createContext(null);
 
 /**
  * Holds the authenticated user and exposes login/signup/logout.
  * On mount, if a token exists we re-validate it by fetching the profile so a
- * stale/expired token logs the user out cleanly.
+ * stale/expired token logs the user out cleanly. Also hydrates/clears the
+ * favorites store alongside the session.
  */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,6 +24,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const { user: me } = await authService.getMe();
         setUser(me);
+        useFavoriteStore.getState().hydrate();
       } catch {
         tokenStorage.clear();
       } finally {
@@ -34,6 +37,8 @@ export const AuthProvider = ({ children }) => {
   const persistSession = useCallback(({ token, user: u }) => {
     tokenStorage.set(token);
     setUser(u);
+    // Load the user's favorites for instant heart-toggle state.
+    useFavoriteStore.getState().hydrate();
   }, []);
 
   const login = useCallback(
@@ -57,6 +62,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     tokenStorage.clear();
     setUser(null);
+    useFavoriteStore.getState().clear();
   }, []);
 
   const value = {

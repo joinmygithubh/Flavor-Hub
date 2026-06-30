@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ShoppingCart, Search, User, Moon, Sun, LogOut, ClipboardList, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Search, User, Moon, Sun, LogOut, ClipboardList, LayoutDashboard, ChevronDown, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '../ui/Logo.jsx';
 import { useCartStore } from '../../store/cartStore.js';
@@ -113,6 +113,7 @@ const Navbar = () => {
                     <p className="truncate text-xs text-charcoal/50 dark:text-cream/50">{user.email}</p>
                   </div>
                   <DropdownLink to="/profile" icon={ClipboardList}>My Orders</DropdownLink>
+                  <DropdownLink to="/favorites" icon={Heart}>Favorites</DropdownLink>
                   {isAdmin && <DropdownLink to="/admin" icon={LayoutDashboard}>Admin Dashboard</DropdownLink>}
                   <button
                     onClick={handleLogout}

@@ -14,6 +14,7 @@ import authRoutes from './routes/authRoutes.js';
 import dishRoutes from './routes/dishRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 /**
  * Builds and configures the Express application. Kept separate from server.js so
@@ -75,6 +76,7 @@ export const createApp = () => {
   app.use('/api/dishes', dishRoutes);
   app.use('/api/orders', orderRoutes);
   app.use('/api/payments', paymentRoutes);
+  app.use('/api/users', userRoutes);
 
   // --- 404 + centralized error handling (must be last) ---
   app.use(notFound);

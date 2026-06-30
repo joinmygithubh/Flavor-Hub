@@ -5,6 +5,7 @@ import { Clock, ChevronLeft, Star, ShoppingCart, Flame } from 'lucide-react';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import SafeImage from '../components/ui/SafeImage.jsx';
+import FavoriteButton from '../components/ui/FavoriteButton.jsx';
 import Rating from '../components/ui/Rating.jsx';
 import VegBadge from '../components/ui/VegBadge.jsx';
 import QuantityStepper from '../components/ui/QuantityStepper.jsx';
@@ -141,7 +142,10 @@ const DishDetail = () => {
             <VegBadge isVeg={dish.isVeg} showLabel />
           </div>
 
-          <h1 className="mt-3 font-display text-3xl font-bold">{dish.name}</h1>
+          <div className="mt-3 flex items-start justify-between gap-3">
+            <h1 className="font-display text-3xl font-bold">{dish.name}</h1>
+            <FavoriteButton dishId={dish._id} size="lg" className="shrink-0 border border-black/5 dark:border-white/10" />
+          </div>
 
           <div className="mt-2 flex items-center gap-4 text-sm text-charcoal/60 dark:text-cream/60">
             <Rating value={dish.rating} count={dish.reviews?.length} size="md" />

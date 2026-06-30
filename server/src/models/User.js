@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema(
       default: 'user',
     },
     addresses: [addressSchema],
+
+    // Dishes the user has favorited (wishlist).
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Dish' }],
   },
   { timestamps: true }
 );
