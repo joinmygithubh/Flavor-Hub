@@ -20,13 +20,14 @@ import NotFound from './pages/NotFound.jsx';
 
 /** Root layout + route table. */
 const App = () => (
-  <div className="flex min-h-screen flex-col">
+  <div className="flex min-h-[100dvh] w-full flex-col">
     <ScrollToTop />
     <Navbar />
     <CartDrawer />
 
-    {/* pb-20 leaves room for the mobile bottom nav. */}
-    <main className="flex-1 pb-20 md:pb-0">
+    {/* flex-1 makes the content area grow so the footer is pushed to the bottom
+        even on short pages. pb-20 leaves room for the mobile bottom nav. */}
+    <main className="w-full flex-1 pb-20 md:pb-0">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dishes" element={<Dishes />} />

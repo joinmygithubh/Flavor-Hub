@@ -45,7 +45,7 @@ const Home = () => {
             backgroundPosition: 'center',
           }}
         />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:py-28">
+        <div className="relative container-page py-20 sm:py-28">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -80,7 +80,7 @@ const Home = () => {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="container-page">
         {/* Value props */}
         <section className="-mt-8 grid gap-4 sm:grid-cols-3">
           {[
@@ -122,7 +122,7 @@ const Home = () => {
           {loading ? (
             <DishGridSkeleton count={8} />
           ) : (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
               {featured.map((dish) => (
                 <DishCard key={dish._id} dish={dish} />
               ))}
