@@ -14,6 +14,10 @@ import { Dish } from '../models/Dish.js';
 import { Restaurant } from '../models/Restaurant.js';
 import { User } from '../models/User.js';
 import { dishesData } from './dishes.data.js';
+import { extraDishesData } from './dishes.extra.data.js';
+
+// Full catalogue = hand-curated base set + real-photo dishes from TheMealDB.
+const allDishesData = [...dishesData, ...extraDishesData];
 
 const log = (...args) => console.log('[seed]', ...args); // eslint-disable-line no-console
 
@@ -40,7 +44,7 @@ const importData = async () => {
   const restaurants = await Restaurant.insertMany(restaurantsData);
   log(`Inserted ${restaurants.length} restaurants.`);
 
-  const dishesToInsert = dishesData.map((dish) => ({
+  const dishesToInsert = allDishesData.map((dish) => ({
     ...dish,
     restaurant: pickRestaurant(dish.cuisine, restaurants)._id,
   }));
